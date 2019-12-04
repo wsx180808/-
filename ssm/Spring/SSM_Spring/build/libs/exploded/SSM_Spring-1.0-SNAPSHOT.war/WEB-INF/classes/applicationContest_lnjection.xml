@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    					http://www.springframework.org/schema/beans/spring-beans.xsd
+    					http://www.springframework.org/schema/mvc
+    					http://www.springframework.org/schema/mvc/spring-mvc.xsd
+    					http://www.springframework.org/schema/context
+    					http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:annotation-config></context:annotation-config>
+    <!--set方式注入-->
+    <bean name="user" class="dean.User" lazy-init="true" scope="prototype" init-method="v1" destroy-method="v2">
+        <!--通过property注入初始化，必须要有set方法-->
+        <property name="id" value="1"></property>
+        <property name="a" value="2"></property>
+        <property name="pwss" value="3"></property>
+        <property name="user" value="4"></property>
+
+    </bean>
+    <bean name="user2" class="dean.user2">
+        <property name="shi" value="吴"></property>
+        <property name="wu" value="5"></property>
+        <property name="xiang" value="事项"></property>
+        <!--user2中包含user 用ref引用user的name属性值-->
+        <property name="uservo" ref="user"></property>
+    </bean>
+    <!--构造方法注入-->
+    <bean name="user3" class="dean.user2">
+        <!--type指定数据类型，定位更加精确-->
+        <!--index 指定参数位置-->
+        <constructor-arg name="shi" value="吴" type="java.lang.String" index="2"></constructor-arg>
+        <constructor-arg name="wu" value="5" index="1"></constructor-arg>
+        <constructor-arg name="xiang" value="1"></constructor-arg>
+        <constructor-arg name="user" ref="user"></constructor-arg>
+    </bean>
+    <!--复杂方法注入-->
+    <bean name="user4" class="dean.user3">
+        <!--list集合-->
+        <property name="list">
+        <array>
+        <value>1</value>
+        <value>2</value>
+        <value>3</value>
+        <value>4</value>
+        <ref bean="user"></ref>
+        </array>
+        </property>
+
+        <!--数组-->
+        <property name="obj">
+        <array>
+        <value>1</value>
+        <value>2</value>
+        <value>3</value>
+        <value>4</value>
+        <ref bean="user"></ref>
+        </array>
+        </property>
+
+
+        <!--set-->
+        <property name="set">
+        <array>
+        <value>1</value>
+        <value>2</value>
+        <value>3</value>
+        <value>4</value>
+        <ref bean="user"></ref>
+        </array>
+        </property>
+
+
+        <!--map-->
+        <property name="map">
+        <map>
+        <entry key="1" value="2"></entry>
+        <entry key="2" value="3"></entry>
+        <entry key-ref="user" value-ref="user2"></entry>
+        </map>
+        </property>
+        <!--properties-->
+
+
+        <property name="properties">
+            <props>
+                <prop key="2">吴世勋</prop>
+                <prop key="1">吴世祥</prop>
+            </props>
+
+        </property>
+    </bean>
+</beans>

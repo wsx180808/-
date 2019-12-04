@@ -1,0 +1,10 @@
+rootProject.name = 'SSM'
+include 'web'
+include 'dao'
+include 'SSM_Mybatis'
+include 'Mybatis_generator'
+include 'SSM_Spring'
+findProject(':SSM_Spring')?.name = 'Spring'
+include 'SSM_Spring'
+include 'SSM_Spring'
+

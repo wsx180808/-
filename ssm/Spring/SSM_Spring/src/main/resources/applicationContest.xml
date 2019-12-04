@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    					http://www.springframework.org/schema/beans/spring-beans.xsd
+    					http://www.springframework.org/schema/mvc
+    					http://www.springframework.org/schema/mvc/spring-mvc.xsd
+    					http://www.springframework.org/schema/context
+    					http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:annotation-config></context:annotation-config>
+    <!-- name 是起一个名字，我们可以通过这个name来利用容器获取对象
+           name 可以使用特殊字符
+           name 可以重复
+           我们在实际开发中不推荐将多个对象名字命名为重复的-->
+    <!--默认使用bean的空参构造创建对象，没有空参构造会报错-->
+    <!-- id与name作用基本相同，单不推荐使用 不支持特殊字符，不能重复 -->
+    <!-- class：是被管理对象的全包名，spring会通过这个包名来创建对象 -->
+    <!--lazy-init 延迟加载 true就是创建容器时不加载配置的bean对象，在获取的时候才创建；-->
+    <!--scope 是否是单例 prototype多例 singleton单例 request 他的生命周期会与request请求一致 session 生命周期与session一致-->
+    <!--init-method 创建对象时，默认执行的一个方法名，此处填写bean的方法名-->
+    <!--destroy-method 销毁对象时，默认执行的一个方法名，此处填写bean的方法名 在多例模式中不适用-->
+    <bean name="user" class="dean.User"  lazy-init="true" scope="prototype" init-method="v1" destroy-method="v2">
+        <property name="id" value="2"></property>
+    </bean>
+
+    <!--导入其他配置文件内容-->
+    <import resource="applicationContest_lnjection.xml"></import>
+
+</beans>

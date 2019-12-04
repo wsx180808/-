@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<goodslist>
+<!-- 下面是商品信息 -->
+	<good id="10001" birthday="2018-4-1">
+		<price>12</price>
+		<name>香蕉</name>
+		<place>广州</place>
+	</good>
+	<good id="10002">
+		<price>39</price>
+		<name>苹果</name>
+		<place>北京</place>
+	</good>
+	<good>
+		<price>33</price>
+		<name>&lt;芒果</name>
+		<place>广州&amp;</place>
+	</good>
+	<good>
+		<price>12</price>
+		<name>香蕉</name>
+		<place>广州</place>
+	</good>
+	<Font></Font>
+	<Good></Good>
+	<good></good>
+	<xxxx/>
+<!-- 	约束  ：约束文档
+DTD
+Schema
+  -->
+</goodslist>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+<!--目标对象-->
+    <bean class="spring_aop.servlet.UserServleImp" id="userServle"></bean>
+    <!--通知对象-->
+    <bean class="spring_aop.aop.MyAdvice" id="myAdviceop"></bean>
+
+    <!--2 配置AOP操作-->
+    <aop:config>
+        <!--配置切入点 expression切入点表达式，可以配置要增强的方法
+        public void  spring_aop.servlet.UserServleImp.save()
+        public void  spring_aop.servlet.UserServleImp.*():所有方法都为切入点
+        * spring_aop.servlet.UserServleImp.save()：对返回值以及访问修饰符不做要求，可以用*代替
+         public void  spring_aop.servlet.*ServleImp.save()：以ServleImp结尾的类
+         public void  spring_aop.servlet.UserServleImp.save(..):对参数类型以及个数不做要求
+
+        -->
+        <aop:pointcut id="pointcut" expression="execution( * spring_aop.servlet.UserServleImp.*(..))"/>
+        <!--配置切面
+            把增强用到方法上面
+        -->
+        <aop:aspect ref="myAdviceop"><!--ref为通知对象-->
+
+            <!--配置增强类型-->
+            <aop:before method="before" pointcut-ref="pointcut"/>
+        </aop:aspect>
+    </aop:config>
+
+</beans>

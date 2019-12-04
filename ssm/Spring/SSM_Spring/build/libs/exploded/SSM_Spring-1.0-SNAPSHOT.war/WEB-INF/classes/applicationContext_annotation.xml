@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd ">
+    <!-- 注解开发 -->
+    <!-- 开启组件扫描 base-package 扫描该包下以及子包的所有注解   -->
+    <context:component-scan base-package="dean"/>
+
+    <!-- 将pet对象交给spring容器管理 -->
+    <!--<bean name="user" class="dean.User4" lazy-init="true" scope="prototype" init-method="v1" destroy-method="v2">-->
+        <!--&lt;!&ndash;通过property注入初始化，必须要有set方法&ndash;&gt;-->
+        <!--<property name="id" value="1"></property>-->
+        <!--<property name="a" value="2"></property>-->
+        <!--<property name="pwss" value="3"></property>-->
+        <!--<property name="user" value="4"></property>-->
+
+    <!--</bean>-->
+</beans>

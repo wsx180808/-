@@ -1,0 +1,8 @@
+mybatis\aspect\WebLogAspect.class
+mybatis\datasource\DruidDBConfig.class
+App.class
+mybatis\controller\UserController.class
+mybatis\service\UserServiceImp.class
+mybatis\userMapper\IUserMapper.class
+mybatis\bean\User.class
+mybatis\service\IUserService.class

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的
+例如namespace="me.gacl.mapping.userMapper"就是me.gacl.mapping(包名)+userMapper(userMapper.xml文件去除后缀)
+ -->
+<mapper namespace="mapper.userMapper">
+    <!-- 在select标签中编写查询的SQL语句， 设置select标签的id属性为getUser，id属性值必须是唯一的，不能够重复
+    使用parameterType属性指明查询时使用的参数类型，resultType属性指明查询返回的结果集类型
+    resultType="me.gacl.domain.User"就表示将查询结果封装成一个User类的对象返回
+    User类就是users表所对应的实体类
+    -->
+    <!--
+        根据id查询得到一个user对象
+     -->
+    <!-- 根据名字模糊查询用户 -->
+    <!-- #{} 占位符 尽量选用#{}来解决问题 '1' '王'-->
+    <!-- ${} 字符串拼接 or 1=1  王 -->
+    <!-- order by ${} -->
+    <sql id="mysqlselect">
+select * from user1 where id =#{id}
+    </sql>
+
+    <select id="getUser" parameterType="Integer"
+            resultType="User">
+        <include refid="mysqlselect"></include>
+
+    </select>
+
+
+    <!-- 一对一 -->
+
+    <resultMap id="userwu" type="user2">
+        <id property="wu" column="wu"></id>
+        <result property="shi" column="shi"></result>
+        <result property="xiang" column="xiang"></result>
+
+        <association property="uservo" javaType="User">
+            <result property="id" column="id"></result>
+            <result property="user" column="user"></result>
+            <result property="pwss" column="pwss"></result>
+            <result property="a" column="a"></result>
+        </association>
+    </resultMap>
+    <select id="getUserAllvo" resultMap="userwu">
+        SELECT a.*,b.* FROM user2 a LEFT JOIN user1 b ON a.wu=b.id
+    </select>
+
+
+    <!-- 一对多 -->
+
+    <resultMap id="userwu3" type="user3">
+        <id property="wu" column="wu"></id>
+        <result property="shi" column="shi"></result>
+        <result property="xiang" column="xiang"></result>
+        <collection property="users" ofType="User">
+            <result property="id" column="id"></result>
+            <result property="user" column="user"></result>
+            <result property="pwss" column="pwss"></result>
+            <result property="a" column="a"></result>
+        </collection>
+
+    </resultMap>
+    <select id="getUserAllvo3" resultMap="userwu3">
+        SELECT a.*,b.* FROM user2 a LEFT JOIN user1 b ON a.wu=b.id
+    </select>
+
+    <!--if_where多条件模糊查询-->
+    <select id="selectUserList" resultType="User" parameterType="User">
+
+        select * from user1
+        <!--智能去除and-->
+        <where>
+            <!--传参中的对象属性不为空时-->
+            <if test="id!=null ">
+                id = #{id}
+            </if>
+            <if test="user!=null  user != ">
+                and user like "%"#{user}"%"
+            </if>
+        </where>
+    </select>
+    <!--trim多条件模糊查询-->
+    <select id="selectUserListTrim" resultType="User" parameterType="User">
+
+        select * from user1
+        <!--智能去除and prefix:值会代替trim抬头标签，suffix：会替代trim结尾标签，suffixOverrides：智能截取sql中后and-->
+        <trim prefix="where" suffixOverrides="and">
+            <!--传参中的对象属性不为空时-->
+            <if test="id!=null ">
+                id = #{id}
+            </if>
+            <if test="user!=null  user != ">
+                and user like "%"#{user}"%"
+            </if>
+        </trim>
+
+
+    </select>
+
+    <update id="updateUserset" parameterType="User">
+        <!--标签智能截取逗号-->
+        update user1
+        <set>
+            <if test="user != null">
+                user = #{user},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <!--foreach遍历数组 in(1，2，3)-->
+    <select id="selectin" resultType="User">
+        select * from user1 where id in
+        <!--传入的值是数组 传入数组时collection属性写array，传入list集合时collection属性写list 传入对象时collection属性写传入对象的属性名 -->
+        <foreach collection="array" close=")" open="(" item="id" separator=",">
+            #{id}
+        </foreach>
+
+    </select>
+    <select id="getUserAll" resultType="User">
+        select * from user1
+    </select>
+    <!-- 添加用户 -->
+    <insert id="insertUser" parameterType="User">
+		insert into user1 values( #{user} , #{id}, #{pwss}, #{a} )
+	</insert>
+
+    <!-- 修改用户 -->
+    <update id="updateUser" parameterType="User">
+		update user1 set user = #{user} where id = #{id}
+	</update>
+
+    <!-- 根据id删除用户 -->
+    <delete id="deleteUserById" parameterType="Int">
+		delete from user1 Where id = #{id}
+	</delete>
+
+</mapper>

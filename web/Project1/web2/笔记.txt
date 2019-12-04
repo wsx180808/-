@@ -1,0 +1,267 @@
+关于Seruvlet（生命周期方法）
+第一次被请求的时候会调用init
+每一次被请求会调用service方法
+终止调用destroy
+
+利用log输出观察servlet的创建和销毁
+
+jar包放在哪里
+	自动引入到工程里面
+	
+page和pageContext内置对象
+	page的作用域只在当前页面有效，如果jsp页面发生了请求转发的话，当前页面的page对象就不见了。
+	page就是this当前对象。
+	
+	作用域：page<request<session<application
+	javax.servlet.jsp.PageContext
+	https://baike.baidu.com/item/pageContext/5022745?fr=aladdin
+	作用
+	1，setAttribute（PAGE_SCOPE、REQUEST_SCOPE、SESSION_SCOPE、APPLICATION_SCOPE）
+	2，getOut()	getRequest()	getResponse()	getServletContext()	getSession()
+	
+	
+web.xml
+	在创建项目的时候生成（推荐）
+	首页的默认配置
+
+参数乱码问题解决
+	request.setCharacterEncoding("utf-8");
+
+<jsp:include page="xxx.jsp"></jsp:include>
+
+路径问题（相对路径和绝对路径）
+	客户端路径
+	服务器端路径
+	
+
+
+单例模式
+
+mvc分层架构
+	model		模型（数据模型，每一个类就是一个模型，每一个类对象代表一个完整的数据
+				比如User类里面包含了username password 	age这些组成了一个新的数据就是账号数据，这个User类就相当于一个数据模型
+				船或者车模表示一个船或者车有哪些部件，那一个数据模型比如账号类，就表示了账号数据有哪些数据组成）
+	view		视图
+	controller	控制
+JavaEE分层架构
+	Web层		jsp/servlet
+	Service层	服务层也叫做业务逻辑层
+	Dao层		Data Access Object数据访问对象，这里的数据就是数据库中的数据，那数据访问对象就是用来访问数据的。
+				就是用来做增删改查的，所以对数据库的增删改查的相关类和方法放在dao层里面。
+总的架构图，并通过注册案例来分析。
+
+使用jsp做一个列表显示，后台的商品列表
+
+----------------------jstl和el表达式----------------------
+
+el表达式
+	https://baike.baidu.com/item/EL%E8%A1%A8%E8%BE%BE%E5%BC%8F/1190845?fr=aladdin
+	目的：是为了使JSP写起来更加简单
+
+el能干什么
+	可以从域对象（request session application pageContext）中取得数据
+
+el表达式语法结构
+	${expression}
+	
+	${requestScope.key}
+	${pageContextScope.key}
+	${sessionScope.key}
+	${applicationScope.key}
+	
+	${key}如果不指定域，那么会依次从域中搜索
+	
+例子
+	${username} 取得request里面名字为username的属性值（如果不存在返回空字符串）
+	${user.username}
+	${list[index]}
+	${map.key}
+	${pageContext.request.contextPath}
+	
+	${10+89} 支持放置表达式运算
+	${age>10}
+	${empty user} 是否是null对象
+
+jstl表达式
+	https://baike.baidu.com/item/JSTL
+	目的：让jsp写起来更加简单，优雅
+	（可以让jsp页面不写java代码，实现取数据）
+
+jstl和el的关系
+	合作关系，一起使用让jsp写起来更加简单优雅
+
+jstl是一个标签库
+	什么是标签库？可以只用一些自定义有自定义功能的标签。
+
+下载地址
+	http://tomcat.apache.org/taglibs/standard/
+	
+要使用jstl提供的标签
+	要先引入jstl对应的标签库 taglib
+
+如何引入jstl标签库
+	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+跟数据存储相关 set out remove
+<c:set var="username" value="123" scope="request"></c:set>
+<%
+// request.setAttribute("username", "123");
+%>
+<c:out value="${username }"></c:out>
+${username }
+<c:remove var="username" scope="request" />
+<%
+request.removeAttribute("username");
+%>
+
+条件标签
+if语句
+<c:if test="${age>=19 }">
+<font color="green">你是成年人</font>
+</c:if>
+if else语句
+<c:choose>
+<c:when test="${age>=19 }">
+<font color="green">你是成年人</font>
+</c:when>
+<c:otherwise>
+<font color="red">未成年</font>
+</c:otherwise>
+</c:choose>
+
+循环标签
+<c:forEach items="${lists }" var="user">
+${user.username }:${user.age }<br/>
+</c:forEach>
+<c:forEach items="${map }" var="kv">
+${kv.key }:${kv.value }<br/>
+</c:forEach>
+（要给属性提供get方法）
+
+----------------------Ajax----------------------
+什么是Json
+	http://www.json.org/json-zh.html
+	
+
+作用：
+	在不进行页面跳转或者页面刷新的情况下，向服务器发起请求，并取得服务器响应的数据。
+
+应用领域：
+	数据校验
+
+优点：
+	1，用户体验比较好（不需要页面跳转，速度快）
+	2，服务器压力比较小
+
+jQuery发起Ajax请求
+		$.ajax({
+			url:"xxxservlet",
+			type:"post",
+			data:{
+				key:value,
+				key:value
+			},
+			dataType:"json",
+			success:function(msg){
+				msg.key;
+			}
+			
+		});
+其他参数和用法http://api.jquery.com/jQuery.ajax/
+		
+JavaScript发起Ajax请求
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.open("GET","xxxservlet",true);
+		xmlhttp.send();
+		xmlhttp.onreadystatechange=function(){
+			if (xmlhttp.readyState==4 && xmlhttp.status==200){
+				//成功后的处理
+		    }
+		}	
+其他参数和用法http://www.w3school.com.cn/ajax/ajax_xmlhttprequest_send.asp
+
+
+----------------------过滤器Filter----------------------
+水过滤器，可以过滤掉水中的杂质
+
+java web中的过滤器
+	用来过滤请求，判断一个请求是否非法，并进行处理。可以对请求中的数据进行预处理。
+	
+应用：
+	后台页面访问过滤
+	中文参数处理（字符集编码处理）
+	过滤敏感词汇
+
+过滤器可以做
+	请求的预处理
+	请求的后处理
+
+创建过滤器
+	1，过滤器就是一个Java类，创建一个类
+	2，继承自Filter
+	3，配置过滤路径
+		配置文件
+		注解@WebFilter、
+
+配置文件方式
+<filter>
+  <filter-name></filter-name>
+  <filter-class></filter-class>
+  </filter>
+  <filter-mapping>
+  <filter-name></filter-name>
+  <url-pattern></url-pattern>
+  </filter-mapping>
+ 
+如何给过滤器添加参数
+	<init-param></init-param>
+
+过滤器的dispatcher（配置到servletmapping里面）
+	REQUEST	INCLUDE	FORWARD	ERROR
+----------------------监听器Listener----------------------
+用来监听request session和 application
+HttpServletRequest HttpSession ServletContext
+
+request session application
+
+应用
+	统计在线人数
+	web应用启动起来的时候做一些初始化的工作
+
+创建监听器
+	1，监听器是一个类，创建类
+	2，实现监听器接口
+		javax.servlet.ServletContextListener		
+		HttpSessionListener
+		ServletRequestListener
+		
+		ServletContextAttributeListener		
+		HttpSessionAttributeListener
+		ServletRequestAttributeListener
+	3，配置
+	  <listener>
+	  <listener-class></listener-class> 
+	  </listener>
+	  或者注解方式
+		@WebListener
+
+多个监听器的执行顺序
+	init按照配置的顺序
+	销毁的时候相反
+
+监听的东西
+	1，对象的创建和销毁
+	2，属性的创建、替换和移除
+		setAttribute	removeAttribute
+
+session销毁时间配置
+ <session-config>
+  <session-timeout>1</session-timeout>
+  </session-config>
+ 
+HttpSessionBindListener
+	监听某个对象被添加到session里面或者被移除
+	session.setAttribute("user",user);
+	session.removeAttribute("user");
+----------------------案例----------------------
+1，单点登录

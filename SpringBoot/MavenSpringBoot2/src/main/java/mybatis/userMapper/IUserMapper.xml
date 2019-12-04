@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="mybatis.userMapper.IUserMapper" >
+
+    <insert id="insert" parameterType="mybatis.bean.User">
+        insert into user (u_id,u_username,u_userpass) VALUES(#{u_id},#{u_username},#{u_userpass})
+    </insert>
+
+    <select id="sele" resultType="mybatis.bean.User" >
+        select * from user
+    </select>
+
+    <select id="seleid" resultType="mybatis.bean.User" parameterType="Integer">
+        select * from user where u_id = #{u_id}
+    </select>
+
+
+
+    <select id="selename" parameterType="mybatis.bean.User" resultType="mybatis.bean.User">
+        select * from user where u_username = #{u_username} and u_userpass = #{u_userpass}
+
+    </select>
+</mapper>
